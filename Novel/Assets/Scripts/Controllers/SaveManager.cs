@@ -9,35 +9,22 @@ public class SaveManager : MonoBehaviour
     public static void SaveGame(SaveData data)
     {
         data.prevScenes = data.prevScenes.FindAll(index => index >= 0);
-
-        // Лог для отладки
-        Debug.Log("Saving prevScenes: " + string.Join(", ", data.prevScenes));
-
         PlayerPrefs.SetString(SAVED_GAME, JsonUtility.ToJson(data));
     }
 
     public static SaveData LoadGame()
     {
         string savedGameJson = PlayerPrefs.GetString(SAVED_GAME);
-
-        // Если сохранённых данных нет, создаём новый объект SaveData с дефолтными значениями
         if (string.IsNullOrEmpty(savedGameJson))
         {
-            Debug.Log("No saved game found, returning default data.");
-            return new SaveData(); // Возвращаем пустые данные
+            return new SaveData(); 
         }
 
         SaveData loadedData = JsonUtility.FromJson<SaveData>(savedGameJson);
-
-        // Проверка на пустой список prevScenes
         if (loadedData.prevScenes == null || loadedData.prevScenes.Count == 0)
         {
-            Debug.Log("prevScenes is empty, initializing default scenes.");
-            loadedData.prevScenes = new List<int>(); // Можно добавить стартовые сцены по умолчанию, если нужно
+            loadedData.prevScenes = new List<int>();
         }
-
-        // Лог для отладки
-        Debug.Log("Loaded prevScenes: " + string.Join(", ", loadedData.prevScenes));
 
         return loadedData;
     }

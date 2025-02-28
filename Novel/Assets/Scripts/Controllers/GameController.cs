@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     public AudioController audioController;
     public DataHolder data;
     public string menuScene;
+    public string gameOverScene;
 
     private State state = State.IDLE;
 
@@ -58,6 +59,7 @@ public class GameController : MonoBehaviour
                     if (state == State.IDLE && bottomBar.IsLastSentence())
                     {
                         PlayScene((currentScene as StoryScene).nextScene);
+                        
                     }
                     else {
                     bottomBar.PlayNextSentence();
@@ -101,7 +103,6 @@ public class GameController : MonoBehaviour
                     sentence = bottomBar.GetSentenceIndex(),
                     prevScenes = historyIndicies
                 };
-                Debug.Log("Saving prevScenes: " + string.Join(", ", historyIndicies));
                 SaveManager.SaveGame(data);
                 SceneManager.LoadScene(menuScene);
             }
@@ -109,6 +110,11 @@ public class GameController : MonoBehaviour
     }
     public void PlayScene(GameScene scene, int sentenceIndex = -1, bool isAnimated = true)
     {
+        if (scene == null || (scene is StoryScene storyScene && string.IsNullOrWhiteSpace(storyScene.nextScene?.name)))
+        {
+            SceneManager.LoadScene(gameOverScene);
+            return;
+        }
         StartCoroutine(SwitchScene(scene, sentenceIndex, isAnimated));
     }
     private IEnumerator SwitchScene(GameScene scene, int sentenceIndex = -1, bool isAnimated = true)

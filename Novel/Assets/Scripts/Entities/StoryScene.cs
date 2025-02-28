@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [CreateAssetMenu(fileName = "NewStoryScene", menuName = "Data/New Story Scene")]
 [System.Serializable]
@@ -10,6 +11,9 @@ public class StoryScene : GameScene
     public List<Sentence> sentences;
     public Sprite background;
     public GameScene nextScene;
+
+
+
     [System.Serializable]
     public struct Sentence
     {
